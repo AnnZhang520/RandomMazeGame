@@ -62,6 +62,7 @@ var maze = (function(){
     var ctx = canvas.getContext("2d");
     ctx.strokeStyle = '#005F6B';
     ctx.lineWidth = 2;
+    var currentCell = [0,0];
 
     function cellStart(rowmax, colmax) {
         var row = maze.random(rowmax),
@@ -203,12 +204,12 @@ var maze = (function(){
                 }
                 break;
             case 39:
-                if (col + 1 < colmax - 1 && walls[1] === 0) {
+                if (col + 1 < colmax && walls[1] === 0) {
                     curCell = [row, col + 1];
                 }
                 break;
             case 40:
-                if (row + 1 < rowmax - 1 && walls[2] === 0) {
+                if (row + 1 < rowmax && walls[2] === 0) {
                     curCell = [row + 1, col];
                 }
                 break;
@@ -280,7 +281,7 @@ var maze = (function(){
                         col = currentCell[1];
                     return ctx.fillRect(col * width, row * height, width, height);
                 };
-            }(i), 500 * i);
+            }(i), 100 * i);
         }
     }
 
@@ -303,6 +304,7 @@ var maze = (function(){
         var walls = entrySet(cellWalls, rowCells, columnCells);
         drawWalls(walls, cellWidth, cellHeight, rowCells, columnCells);
         drawPosition([0,0], cellWidth, cellHeight);
+        currentCell = [0,0];
     });
 
     $('#solveMaze').addEventListener('click', function(){
@@ -311,7 +313,7 @@ var maze = (function(){
 
     document.addEventListener('keydown', function(event){
         var key = event.keyCode;
-        var currentCell = keyboardPosition([0,0], key, cellWalls, rowCells, columnCells);
+        currentCell = keyboardPosition(currentCell, key, cellWalls, rowCells, columnCells);
         drawPosition(currentCell, cellWidth, cellHeight);
     });
 
